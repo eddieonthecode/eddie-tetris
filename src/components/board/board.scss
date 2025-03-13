@@ -1,0 +1,22 @@
+.board {
+    width: calc(min(calc(100vh * 10 / 30 - 20px), 100vw));
+
+    &__container {
+        aspect-ratio: 4/5;
+    }
+
+    &__btn {
+        border-radius: 10px;
+        background-color: aqua;
+        box-shadow: 0 4px 4px 4px rgba(0 ,0, 0, 0.4);
+
+        &:hover {
+            background-color: rgb(70, 235, 235);
+        }
+
+        &:active {
+            background-color: rgb(1, 201, 201);
+            box-shadow: none;
+        }
+    }
+}
