@@ -12,7 +12,7 @@ function App() {
     <main className="app w-screen h-screen flex flex-col items-center justify-center">
       {showModalStart && (
         <Modal
-          title="Welcom to Eddie Tetris"
+          title="Welcome to Eddie Tetris"
           okText="Start"
           onOk={() => {
             setShowModalStart(false);
