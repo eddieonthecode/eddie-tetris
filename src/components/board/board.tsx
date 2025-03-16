@@ -3,8 +3,18 @@ import "./board.scss";
 import { Blocks } from "../../models/block";
 import { Colors } from "../../models/color";
 import { Moves } from "../../enums/move";
+import Arrow from "/arrow.svg";
+import Score from "../score/score";
 
-let sizeProportion = "18/30";
+type Props = {
+  isPlaying: boolean;
+  gameStart: boolean;
+  onTogglePlaying: () => void;
+  onRestart: () => void;
+  onFinish: (score: number) => void;
+};
+
+let sizeProportion = "16/30";
 let width = 12;
 let height = 18;
 let dropTime = 500;
@@ -13,20 +23,23 @@ const INITIAL_BOARD = Array.from({ length: height }, () =>
   Array(width).fill(null)
 );
 
-export default function Board() {
-  const [board, setBoard] = useState<string[][]>(INITIAL_BOARD);
+const INITIAL_POSITION = {
+  x: 0,
+  y: 0,
+};
 
+function getInitialBoard() {
+  return [...INITIAL_BOARD.map((row) => [...row])];
+}
+
+export default function Board(_: Props) {
+  const [board, setBoard] = useState<string[][]>(getInitialBoard());
   const [activeBlock, setActiveBlock] = useState<number[][]>([]);
   const [color, setColor] = useState<string>();
+  const [score, setScore] = useState<number>(0);
   const intervalTimerId = useRef<number>(undefined);
-  const positionRef = useRef({
-    x: 0,
-    y: 0,
-  });
-  const [position, setPosition] = useState({
-    x: 0,
-    y: 0,
-  });
+  const positionRef = useRef(INITIAL_POSITION);
+  const [position, setPosition] = useState(INITIAL_POSITION);
   let displayBoard = [...board.map((row) => [...row])];
   let displayBoardRef = useRef<string[][]>([]);
 
@@ -46,13 +59,25 @@ export default function Board() {
   }, [position]);
 
   useEffect(() => {
-    console.log(board);
+    if (_.gameStart) {
+      // Reset states
+      setBoard(getInitialBoard());
+      setScore(0);
+    }
+  }, [_.gameStart]);
+
+  useEffect(() => {
     createNewBlock();
   }, [board]);
 
   useEffect(() => {
-    dropBlock();
-  }, [activeBlock]);
+    if (_.isPlaying) {
+      dropBlock();
+    } else {
+      // Stop drop block
+      clearInterval(intervalTimerId.current);
+    }
+  }, [activeBlock, _.isPlaying]);
 
   /**
    * Drop block
@@ -66,19 +91,21 @@ export default function Board() {
 
         // Check game lose
         if (positionRef.current.y <= 0) {
-          alert("You lose. Press ok to restart !!!");
-          setBoard(INITIAL_BOARD);
+          setScore((prev) => {
+            _.onFinish(prev);
+            return prev;
+          });
         } else {
           // Append a block to board
           let newBoard = displayBoardRef.current.filter((row) =>
             row.some((col) => col === null)
           );
-          let score = displayBoardRef.current.length - newBoard.length;
+          let newScore = displayBoardRef.current.length - newBoard.length;
           newBoard.unshift(
-            ...Array.from({ length: score }, () => Array(width).fill(null))
+            ...Array.from({ length: newScore }, () => Array(width).fill(null))
           );
-          console.log(newBoard);
           setBoard(newBoard);
+          setScore((prev) => prev + newScore * 10);
         }
       }
     }, dropTime);
@@ -175,6 +202,9 @@ export default function Board() {
 
             if (y >= height) return false;
             break;
+          case Moves.TOP:
+            if (x < 0 || x >= width || y >= height) return false;
+            break;
           default:
             break;
         }
@@ -203,6 +233,12 @@ export default function Board() {
         width: `calc(min(calc(100vh * ${sizeProportion} - 10px), 100vw))`,
       }}
     >
+      <Score
+        isPlaying={_.isPlaying}
+        onTogglePlaying={_.onTogglePlaying}
+        onRestart={_.onRestart}
+        score={score}
+      />
       <div className="board__container border-b-2 border-solid border-white flex flex-col">
         {displayBoard.map((row, rowIndex) => (
           <div
@@ -213,43 +249,59 @@ export default function Board() {
             {row.map((col, colIndex) => (
               <div
                 key={colIndex}
-                className="board__col"
+                className="board__col rounded-sm"
                 style={{
                   flexBasis: `${100 / width}%`,
                   backgroundColor: col,
-                  border: col ? "2px solid rgba(255, 255, 255, 0.2)" : "none",
+                  border: col ? "1px solid rgba(0, 0, 0, 0.4)" : "none",
                 }}
               ></div>
             ))}
           </div>
         ))}
       </div>
-      <div className="board__control flex-1 flex flex-col items-center justify-center">
+      <div className="board__control relative basis-2/3 flex flex-col items-center justify-center">
         <button
-          className="board__btn w-1/12 h-1/3 mb-1"
+          className="btn board__btn relative z-10 w-1/6 h-1/3 mb-4"
           onClick={() => handleMove(Moves.TOP)}
         >
-          ⬆️
+          <img
+            src={Arrow}
+            alt="arrow"
+            className="w-full h-full object-contain -rotate-90"
+          />
         </button>
-        <div className="w-1/2 h-1/5 mb-1 flex justify-between">
+        <div className="absolute w-2/3 h-3/5 mb-1 flex justify-between">
           <button
-            className="board__btn w-1/3 h-full"
+            className="btn board__btn w-1/4 h-full"
             onClick={() => handleMove(Moves.LEFT)}
           >
-            ⬅️
+            <img
+              src={Arrow}
+              alt="arrow"
+              className="w-full h-full object-contain rotate-180"
+            />
           </button>
           <button
-            className="board__btn w-1/3 h-full"
+            className="btn board__btn w-1/4 h-full"
             onClick={() => handleMove(Moves.RIGHT)}
           >
-            ➡️
+            <img
+              src={Arrow}
+              alt="arrow"
+              className="w-full h-full object-contain"
+            />
           </button>
         </div>
         <button
-          className="board__btn w-1/12 h-1/3"
+          className="btn board__btn relative z-10 w-1/6 h-1/3"
           onClick={() => handleMove(Moves.BOTTOM)}
         >
-          ⬇️
+          <img
+            src={Arrow}
+            alt="arrow"
+            className="w-full h-full object-contain rotate-90"
+          />
         </button>
       </div>
     </div>

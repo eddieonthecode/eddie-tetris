@@ -1,0 +1,29 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.app {
+  background: rgb(58, 117, 203);
+  background: linear-gradient(
+    90deg,
+    rgba(58, 117, 203, 1) 0%,
+    rgba(9, 21, 121, 1) 29%,
+    rgba(98, 29, 89, 1) 100%
+  );
+}
+
+.btn {
+  background-color: #6495ed;
+  border: 2px solid #fff;
+  border-radius: 12px;
+  color: #fff;
+  cursor: pointer;
+  padding: 2%;
+  filter: drop-shadow(2px 4px 0 #27ae60);
+  font-size: 16px;
+  user-select: none;
+
+  &:active {
+      background-color: #2e6de2;
+  }
+}

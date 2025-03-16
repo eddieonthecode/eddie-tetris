@@ -1,0 +1,30 @@
+.modal {
+    background-color: rgba(0, 0, 0, 0.3);
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+
+    &__container {
+        background-color: #fff;
+        background: #3a75cb;
+        background: linear-gradient(90deg,#3a75cb,#091579 29%,#621d59);
+        border: 2px solid #fff;
+        border-radius: 16px;
+        display: flex;
+        flex-direction: column;
+        max-width: 500px;
+        min-width: 0;
+        padding: 18px 20px;
+        width: calc(100% - 20px);
+    }
+
+    &__header {
+        color: #fff;
+        font-family: monospace;
+        margin-bottom: 20px;
+    }
+
+    &__btn {
+        width: 120px;
+    }
+}
