@@ -1,5 +1,7 @@
 .board {
-    width: calc(min(calc(100vh * 10 / 30 - 20px), 100vw));
+    aspect-ratio: 1/2;
+    overflow: hidden;
+    width: calc(min(calc(100dvh * 1/2 - 10px), 100vw));
 
     &__container {
         aspect-ratio: 4/5;

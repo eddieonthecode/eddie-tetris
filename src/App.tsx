@@ -9,7 +9,7 @@ function App() {
   const score = useRef<number>(0);
 
   return (
-    <main className="app w-screen h-screen flex flex-col items-center justify-center">
+    <main className="app w-screen h-dvh flex flex-col items-center justify-center">
       {showModalStart && (
         <Modal
           title="Welcome to Eddie Tetris"

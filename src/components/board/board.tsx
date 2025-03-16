@@ -14,7 +14,6 @@ type Props = {
   onFinish: (score: number) => void;
 };
 
-let sizeProportion = "16/30";
 let width = 12;
 let height = 18;
 let dropTime = 500;
@@ -228,10 +227,7 @@ export default function Board(_: Props) {
   return (
     <div
       className="board border-2 border-solid border-white rounded-md flex flex-col"
-      style={{
-        aspectRatio: sizeProportion,
-        width: `calc(min(calc(100vh * ${sizeProportion} - 10px), 100vw))`,
-      }}
+      style={{}}
     >
       <Score
         isPlaying={_.isPlaying}
@@ -239,7 +235,7 @@ export default function Board(_: Props) {
         onRestart={_.onRestart}
         score={score}
       />
-      <div className="board__container border-b-2 border-solid border-white flex flex-col">
+      <div className="board__container basis-[62.5%] border-b-2 border-solid border-white flex flex-col">
         {displayBoard.map((row, rowIndex) => (
           <div
             key={rowIndex}
@@ -260,7 +256,7 @@ export default function Board(_: Props) {
           </div>
         ))}
       </div>
-      <div className="board__control relative basis-2/3 flex flex-col items-center justify-center">
+      <div className="board__control basis-[25%] relative flex flex-col items-center justify-center">
         <button
           className="btn board__btn relative z-10 w-1/6 h-1/3 mb-4"
           onClick={() => handleMove(Moves.TOP)}
