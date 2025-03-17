@@ -2,8 +2,8 @@ import { ReactNode } from "react";
 import "./modal.scss";
 
 type Props = {
-  onOk: () => void;
-  okText: string;
+  onOk?: () => void;
+  okText?: string;
   onCancel?: () => void;
   cancelText?: string;
   title?: string;
@@ -19,9 +19,11 @@ export default function Modal(_: Props) {
         </div>
         <div className="modal__body flex justify-center mb-4">{_.children}</div>
         <div className="modal__footer flex justify-center gap-x-4">
-          <button className="btn modal__btn" onClick={_.onOk}>
-            {_.okText || "OK"}
-          </button>
+          {_.onOk && (
+            <button className="btn modal__btn" onClick={_.onOk}>
+              {_.okText || "OK"}
+            </button>
+          )}
           {_.onCancel && (
             <button className="btn modal__btn" onClick={_.onCancel}>
               {_.cancelText || "Cancel"}

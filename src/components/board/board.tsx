@@ -1,10 +1,11 @@
 import { useEffect, useRef, useState } from "react";
 import "./board.scss";
-import { Blocks } from "../../models/block";
+import { Blocks, HardBlocks, MediumBlocks } from "../../models/block";
 import { Colors } from "../../models/color";
 import { Moves } from "../../enums/move";
 import Arrow from "/arrow.svg";
 import Score from "../score/score";
+import { Modes } from "../../enums/mode";
 
 type Props = {
   isPlaying: boolean;
@@ -12,11 +13,23 @@ type Props = {
   onTogglePlaying: () => void;
   onRestart: () => void;
   onFinish: (score: number) => void;
+  mode: Modes;
 };
 
 let width = 12;
 let height = 18;
-let dropTime = 500;
+const DROP_TIME = {
+  easy: 500,
+  medium: 350,
+  hard: 200,
+};
+
+const MILE_STONE = {
+  medium: 15,
+  hard: 30,
+};
+
+const ADVANCE_BLOCK_FREQUENCY = 5;
 
 const INITIAL_BOARD = Array.from({ length: height }, () =>
   Array(width).fill(null)
@@ -39,6 +52,8 @@ export default function Board(_: Props) {
   const intervalTimerId = useRef<number>(undefined);
   const positionRef = useRef(INITIAL_POSITION);
   const [position, setPosition] = useState(INITIAL_POSITION);
+  const [dropTime, setDropTime] = useState(DROP_TIME.easy);
+  const blockCount = useRef<number>(0);
   let displayBoard = [...board.map((row) => [...row])];
   let displayBoardRef = useRef<string[][]>([]);
 
@@ -62,10 +77,22 @@ export default function Board(_: Props) {
       // Reset states
       setBoard(getInitialBoard());
       setScore(0);
+      blockCount.current = 0;
     }
   }, [_.gameStart]);
 
   useEffect(() => {
+    blockCount.current++;
+
+    // Decrease droptime
+    if (blockCount.current === MILE_STONE.medium) {
+      setDropTime(DROP_TIME.medium);
+    }
+
+    if (blockCount.current === MILE_STONE.hard) {
+      setDropTime(DROP_TIME.hard);
+    }
+
     createNewBlock();
   }, [board]);
 
@@ -76,7 +103,7 @@ export default function Board(_: Props) {
       // Stop drop block
       clearInterval(intervalTimerId.current);
     }
-  }, [activeBlock, _.isPlaying]);
+  }, [dropTime, activeBlock, _.isPlaying]);
 
   /**
    * Drop block
@@ -114,7 +141,18 @@ export default function Board(_: Props) {
    * Create a new block
    */
   function createNewBlock() {
-    let newBlock = [...Blocks[Math.floor(Math.random() * Blocks.length)]];
+    let blocks = Blocks;
+
+    if (blockCount.current % ADVANCE_BLOCK_FREQUENCY === 0) {
+      if (_.mode === Modes.MEDIUM) {
+        blocks = MediumBlocks;
+      }
+      if (_.mode === Modes.HARD) {
+        blocks = HardBlocks.concat(MediumBlocks);
+      }
+    }
+
+    let newBlock = [...blocks[Math.floor(Math.random() * blocks.length)]];
     let rotateNum = Math.round(Math.random() * 3);
     let rotatedBlock = rotateBlock(newBlock, rotateNum);
 
