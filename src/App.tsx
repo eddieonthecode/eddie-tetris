@@ -16,6 +16,21 @@ function App() {
     setIsPlaying(true);
   }
 
+  function getModeName() {
+    switch (mode) {
+      case Modes.EASY:
+        return "Easy";
+      case Modes.MEDIUM:
+        return "Medium";
+      case Modes.HARD:
+        return "Hard";
+      default:
+        break;
+    }
+
+    return "";
+  }
+
   return (
     <main className="app w-screen h-dvh flex flex-col items-center justify-center">
       {showModalStart && (
@@ -51,7 +66,17 @@ function App() {
             setShowModalStart(true);
           }}
         >
-          <h1 className="text-white text-xl">Your score: {score.current}</h1>
+          <div className="flex flex-col w-full items-center justify-center">
+            <div
+              className={
+                "rounded-md px-4 py-2 text-white text-lg font-bold mb-4 " +
+                getModeName()
+              }
+            >
+              {getModeName()}
+            </div>
+            <h1 className="text-white text-xl">Your score: {score.current}</h1>
+          </div>
         </Modal>
       )}
       <Board

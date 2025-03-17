@@ -269,10 +269,7 @@ export default function Board(_: Props) {
   }
 
   return (
-    <div
-      className="board border-2 border-solid border-white rounded-md flex flex-col"
-      style={{}}
-    >
+    <div className="board border-2 border-solid border-white rounded-md flex flex-col">
       <Score
         isPlaying={_.isPlaying}
         onTogglePlaying={_.onTogglePlaying}
