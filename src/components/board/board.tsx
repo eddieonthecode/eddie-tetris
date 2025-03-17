@@ -141,7 +141,7 @@ export default function Board(_: Props) {
           );
           setBoard(newBoard);
 
-          let bonus = newScore <= 1 ? 0 : (newScore % 10) * 5;
+          let bonus = newScore <= 1 ? 0 : ((newScore % 10) - 1) * 5;
           setScore((prev) => prev + newScore * 10 + bonus);
         }
       }
