@@ -29,7 +29,8 @@ const MILE_STONE = {
   hard: 30,
 };
 
-const ADVANCE_BLOCK_FREQUENCY = 5;
+const MEDIUM_BLOCK_FREQUENCY = 5;
+const HARD_BLOCK_FREQUENCY = 10;
 
 const INITIAL_BOARD = Array.from({ length: height }, () =>
   Array(width).fill(null)
@@ -148,18 +149,22 @@ export default function Board(_: Props) {
    */
   function createNewBlock() {
     let blocks = Blocks;
+    let isHardBlock =
+      blockCount.current % HARD_BLOCK_FREQUENCY === 0 && _.mode === Modes.HARD;
 
-    if (blockCount.current % ADVANCE_BLOCK_FREQUENCY === 0) {
-      if (_.mode === Modes.MEDIUM) {
-        blocks = MediumBlocks;
-      }
-      if (_.mode === Modes.HARD) {
-        blocks = HardBlocks.concat(MediumBlocks);
-      }
+    if (
+      _.mode === Modes.MEDIUM &&
+      blockCount.current % MEDIUM_BLOCK_FREQUENCY === 0
+    ) {
+      blocks = MediumBlocks;
+    }
+
+    if (isHardBlock) {
+      blocks = HardBlocks;
     }
 
     let newBlock = [...blocks[Math.floor(Math.random() * blocks.length)]];
-    let rotateNum = Math.round(Math.random() * 3);
+    let rotateNum = isHardBlock ? 0 : Math.round(Math.random() * 3);
     let rotatedBlock = rotateBlock(newBlock, rotateNum);
 
     setActiveBlock(rotatedBlock);
