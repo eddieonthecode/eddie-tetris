@@ -103,24 +103,26 @@ export default function Board(_: Props) {
       dropBlock();
     } else {
       // Stop drop block
-      clearInterval(intervalTimerId.current);
+      stopDropBlock();
     }
 
     // Clean up
-    return () => {
-      clearInterval(intervalTimerId.current);
-    };
+    return stopDropBlock;
   }, [dropTime, activeBlock, _.isPlaying]);
+
+  function stopDropBlock() {
+    clearInterval(intervalTimerId.current);
+  }
 
   /**
    * Drop block
    */
   function dropBlock() {
-    clearInterval(intervalTimerId.current);
+    stopDropBlock();
     intervalTimerId.current = setInterval(() => {
       let valid = handleMove(Moves.BOTTOM);
       if (!valid) {
-        clearInterval(intervalTimerId.current);
+        stopDropBlock();
 
         // Check game lose
         if (positionRef.current.y <= 0) {
@@ -179,8 +181,8 @@ export default function Board(_: Props) {
    * Rotate block
    */
   function rotateBlock(block: number[][], time: number) {
-    let prevBlock = [...block];
-    let result = [...block];
+    let prevBlock = [...block.map((row) => [...row])];
+    let result = prevBlock;
 
     for (let i = 0; i < time; i++) {
       let rotatedBlock = Array.from({ length: prevBlock[0].length }, () =>
