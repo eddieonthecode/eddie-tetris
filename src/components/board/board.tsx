@@ -140,7 +140,9 @@ export default function Board(_: Props) {
             ...Array.from({ length: newScore }, () => Array(width).fill(null))
           );
           setBoard(newBoard);
-          setScore((prev) => prev + newScore * 10);
+
+          let bonus = newScore <= 1 ? 0 : (newScore % 10) * 5;
+          setScore((prev) => prev + newScore * 10 + bonus);
         }
       }
     }, dropTime);
