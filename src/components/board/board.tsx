@@ -17,7 +17,7 @@ type Props = {
 };
 
 let width = 12;
-let height = 18;
+let height = 22;
 const DROP_TIME = {
   easy: 500,
   medium: 350,
@@ -283,7 +283,7 @@ export default function Board(_: Props) {
         onRestart={_.onRestart}
         score={score}
       />
-      <div className="board__container basis-[62.5%] border-b-2 border-solid border-white flex flex-col">
+      <div className="board__container basis-[70%] border-b-2 border-solid border-white flex flex-col">
         {displayBoard.map((row, rowIndex) => (
           <div
             key={rowIndex}
@@ -304,9 +304,9 @@ export default function Board(_: Props) {
           </div>
         ))}
       </div>
-      <div className="board__control basis-[25%] relative flex flex-col items-center justify-center">
+      <div className="board__control basis-[20%] relative flex flex-col items-center justify-center min-h-0">
         <button
-          className="btn board__btn relative z-10 w-1/6 h-1/3 mb-4"
+          className="btn board__btn relative z-10 w-1/4 h-1/3 mb-4"
           onClick={() => handleMove(Moves.TOP)}
         >
           <img
@@ -338,7 +338,7 @@ export default function Board(_: Props) {
           </button>
         </div>
         <button
-          className="btn board__btn relative z-10 w-1/6 h-1/3"
+          className="btn board__btn relative z-10 w-1/4 h-1/3"
           onClick={() => handleMove(Moves.BOTTOM)}
         >
           <img

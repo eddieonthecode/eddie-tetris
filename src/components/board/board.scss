@@ -1,10 +1,9 @@
 .board {
     aspect-ratio: 1/2;
     overflow: hidden;
-    width: calc(min(calc(100dvh * 1/2 - 10px), 100vw));
+    width: calc(min(calc(100dvh * 1/2 - 4px), 100vw));
 
     &__container {
-        aspect-ratio: 4/5;
     }
 
     &__btn {
