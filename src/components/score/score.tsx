@@ -24,7 +24,7 @@ export default function Score(_: Props) {
           />
         </button>
       </div>
-      <div className="text-white bg-purple-400 font-bold w-2/5 flex justify-center rounded-md py-[2%] border-2 border-white border-solid">
+      <div className="text-white bg-purple-400 text-xl font-bold w-2/5 flex justify-center rounded-md py-[2%] border-2 border-white border-solid">
         {_.score}
       </div>
       <div className="w-[15%] flex items-center">

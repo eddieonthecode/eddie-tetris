@@ -77,6 +77,7 @@ export default function Board(_: Props) {
       // Reset states
       setBoard(getInitialBoard());
       setScore(0);
+      setDropTime(DROP_TIME.easy);
       blockCount.current = 0;
     }
   }, [_.gameStart]);
@@ -103,6 +104,11 @@ export default function Board(_: Props) {
       // Stop drop block
       clearInterval(intervalTimerId.current);
     }
+
+    // Clean up
+    return () => {
+      clearInterval(intervalTimerId.current);
+    };
   }, [dropTime, activeBlock, _.isPlaying]);
 
   /**
