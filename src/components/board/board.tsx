@@ -74,6 +74,31 @@ export default function Board(_: Props) {
   }, [position]);
 
   useEffect(() => {
+    document.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  });
+
+  function handleKeyDown(e: KeyboardEvent) {
+    switch (e.key) {
+      case "ArrowUp":
+        handleMove(Moves.TOP);
+        break;
+      case "ArrowDown":
+        handleMove(Moves.BOTTOM);
+        break;
+      case "ArrowLeft":
+        handleMove(Moves.LEFT);
+        break;
+      case "ArrowRight":
+        handleMove(Moves.RIGHT);
+        break;
+    }
+  }
+
+  useEffect(() => {
     if (_.gameStart) {
       // Reset states
       setBoard(getInitialBoard());
@@ -208,6 +233,8 @@ export default function Board(_: Props) {
    * Handle move
    */
   function handleMove(move: Moves): boolean {
+    if (!_.isPlaying) return false;
+
     let block = [...activeBlock];
     let newX = positionRef.current.x;
     let newY = positionRef.current.y;
