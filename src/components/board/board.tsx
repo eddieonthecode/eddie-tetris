@@ -29,7 +29,7 @@ const MILE_STONE = {
   hard: 30,
 };
 
-const MEDIUM_BLOCK_FREQUENCY = 5;
+const MEDIUM_BLOCK_FREQUENCY = 10;
 const HARD_BLOCK_FREQUENCY = 10;
 
 const INITIAL_BOARD = Array.from({ length: height }, () =>
